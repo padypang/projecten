@@ -1,74 +1,21 @@
-function initialize() {
-    var status = "* Offline *";
-    if (navigator.onLine) {
-        status = "* Online *";
-        retrieveContacts();
+<script>
+function myFunction() {
+  // Declare variables
+  var input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById('myInput');
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("myUL");
+  li = ul.getElementsByTagName('li');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByTagName("a")[0];
+    txtValue = a.textContent || a.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
     } else {
-        const localStorage = window.localStorage;
-        if (localStorage) {
-            const contacts = localStorage.getItem("contacts");
-            if (contacts) {
-                displayContacts(JSON.parse(contacts));
-            }
-        }
+      li[i].style.display = "none";
     }
-
-    document.getElementById("status").innerHTML = status;
-
-    document.body.addEventListener(
-            "online",
-            function () {
-                document.getElementById("status").innerHTML = "Online";
-            },
-            false
-            );
-    document.body.addEventListener(
-            "offline",
-            function () {
-                document.getElementById("status").innerHTML = "Offline";
-            },
-            false
-            );
+  }
 }
-
-function retrieveContacts() {
-    const xhr = new XMLHttpRequest();
-    const url = "contacts.json";
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            var contacts = JSON.parse(xhr.response).contacts;
-            displayContacts(contacts);
-
-            // Store contact data to localstorage
-            const localStorage = window.localStorage;
-            if (localStorage) {
-                localStorage.setItem("contacts", JSON.stringify(contacts));
-            }
-        }
-    };
-
-    xhr.open("get", url);
-    xhr.send();
-}
-
-function displayContacts(contacts) {
-    contacts.forEach(addRow);
-}
-
-function addRow(contact) {
-    var tcontent = document.getElementById("tcontent");
-    var row = tcontent.insertRow();
-
-    var nameCell = row.insertCell();
-    nameCell.setAttribute('data-label', "Name");
-    nameCell.innerHTML = contact.name;
-
-    var addressCell = row.insertCell();
-    addressCell.setAttribute('data-label', "Address");
-    addressCell.innerHTML = contact.address;
-
-    var emailCell = row.insertCell();
-    emailCell.setAttribute('data-label', "Email");
-    emailCell.innerHTML = contact.email;
-}
+</script>
